@@ -21,6 +21,10 @@ class WasteTracker {
         this.recognition = null;
         this.silenceTimer = null;
 
+        // Word tracking for animation
+        this.displayedWords = [];
+        this.lastWordCount = 0;
+
         // DOM Elements
         this.elements = {
             wasteButton: document.getElementById('log-waste-btn'),
@@ -117,8 +121,12 @@ class WasteTracker {
             }
 
             this.currentTranscript = finalTranscript || interimTranscript;
-            this.elements.transcriptText.textContent = this.currentTranscript;
+
+            // Show transcript container
             this.elements.transcriptContainer.classList.add('visible');
+
+            // Animate words appearing
+            this.animateTranscript(this.currentTranscript, !!finalTranscript);
 
             // Reset silence timer
             this.resetSilenceTimer();
@@ -160,6 +168,44 @@ class WasteTracker {
                 this.processTranscript(this.currentTranscript);
             }
         }, 2000); // 2 seconds of silence
+    }
+
+    // Animate words appearing one by one
+    animateTranscript(text, isFinal) {
+        const words = text.trim().split(/\s+/);
+        const transcriptEl = this.elements.transcriptText;
+
+        // Clear if starting fresh
+        if (words.length < this.lastWordCount) {
+            transcriptEl.innerHTML = '';
+            this.displayedWords = [];
+            this.lastWordCount = 0;
+        }
+
+        // Add new words with animation
+        for (let i = this.displayedWords.length; i < words.length; i++) {
+            const word = words[i];
+            if (!word) continue;
+
+            const wordSpan = document.createElement('span');
+            wordSpan.className = `word ${isFinal ? 'final' : 'interim'}`;
+            wordSpan.textContent = word + ' ';
+            wordSpan.style.animationDelay = `${(i - this.displayedWords.length) * 0.05}s`;
+
+            transcriptEl.appendChild(wordSpan);
+            this.displayedWords.push(word);
+        }
+
+        // Update existing interim words to final if needed
+        if (isFinal) {
+            const wordSpans = transcriptEl.querySelectorAll('.word.interim');
+            wordSpans.forEach(span => {
+                span.classList.remove('interim');
+                span.classList.add('final');
+            });
+        }
+
+        this.lastWordCount = words.length;
     }
 
     // Event Listeners
@@ -204,10 +250,15 @@ class WasteTracker {
         this.currentInterpretation = null;
         this.cancelAutoConfirm();
 
+        // Reset word tracking
+        this.displayedWords = [];
+        this.lastWordCount = 0;
+
         // Hide previous results
         this.elements.transcriptContainer.classList.remove('visible');
+        this.elements.transcriptContainer.classList.remove('processing');
         this.elements.interpretationContainer.classList.remove('visible');
-        this.elements.transcriptText.textContent = '';
+        this.elements.transcriptText.innerHTML = '';
 
         // Capture photo
         this.capturedPhoto = this.capturePhoto();
@@ -239,6 +290,9 @@ class WasteTracker {
         this.isProcessing = true;
         this.updateUI('processing');
 
+        // Add processing state to transcript container
+        this.elements.transcriptContainer.classList.add('processing');
+
         try {
             const response = await fetch('/api/parse', {
                 method: 'POST',
@@ -247,6 +301,9 @@ class WasteTracker {
             });
 
             const data = await response.json();
+
+            // Remove processing state
+            this.elements.transcriptContainer.classList.remove('processing');
 
             if (data.items && data.items.length > 0) {
                 this.currentInterpretation = {
@@ -261,6 +318,7 @@ class WasteTracker {
             }
         } catch (err) {
             console.error('Parse error:', err);
+            this.elements.transcriptContainer.classList.remove('processing');
             this.updateUI('error', 'Connection error. Please try again.');
         } finally {
             this.isProcessing = false;
@@ -379,8 +437,12 @@ class WasteTracker {
         this.currentTranscript = '';
         this.currentInterpretation = null;
         this.capturedPhoto = null;
+        this.displayedWords = [];
+        this.lastWordCount = 0;
         this.elements.transcriptContainer.classList.remove('visible');
+        this.elements.transcriptContainer.classList.remove('processing');
         this.elements.interpretationContainer.classList.remove('visible');
+        this.elements.transcriptText.innerHTML = '';
         this.updateUI('idle');
     }
 
