@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneClick Voice Waste Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel - Help/Examples -->
+        <aside class="help-panel">
+            <div class="logo-section">
+                <svg class="logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="#1E40AF"/>
+                    <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="logo-text">OneClick</span>
+            </div>
+
+            <div class="help-content">
+                <h1 class="help-title">Voice Waste Tracker</h1>
+                <p class="help-subtitle">Tap the button and say what you wasted</p>
+
+                <div class="examples-section">
+                    <h3 class="examples-header">Example phrases:</h3>
+
+                    <div class="example-card">
+                        <span class="example-icon">🍗</span>
+                        <div class="example-content">
+                            <span class="example-text">"I threw away 50 chicken filets"</span>
+                            <span class="example-category">Proteins</span>
+                        </div>
+                    </div>
+
+                    <div class="example-card">
+                        <span class="example-icon">🌾</span>
+                        <div class="example-content">
+                            <span class="example-text">"Wasted 10 pounds of flour"</span>
+                            <span class="example-category">Dry Goods</span>
+                        </div>
+                    </div>
+
+                    <div class="example-card">
+                        <span class="example-icon">🍋</span>
+                        <div class="example-content">
+                            <span class="example-text">"Dumped 2 gallons of lemonade"</span>
+                            <span class="example-category">Beverages</span>
+                        </div>
+                    </div>
+
+                    <div class="example-card">
+                        <span class="example-icon">🥐</span>
+                        <div class="example-content">
+                            <span class="example-text">"25 biscuits expired"</span>
+                            <span class="example-category">Breads</span>
+                        </div>
+                    </div>
+
+                    <div class="example-card">
+                        <span class="example-icon">🥬</span>
+                        <div class="example-content">
+                            <span class="example-text">"3 bags of lettuce went bad"</span>
+                            <span class="example-category">Produce</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="categories-section">
+                    <span class="category-badge">Proteins</span>
+                    <span class="category-badge">Produce</span>
+                    <span class="category-badge">Breads</span>
+                    <span class="category-badge">Dairy</span>
+                    <span class="category-badge">Sauces</span>
+                    <span class="category-badge">Menu Items</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Panel - Input Area -->
+        <main class="input-panel">
+            <!-- Camera Preview -->
+            <div class="camera-container">
+                <video id="camera-preview" autoplay playsinline muted></video>
+                <canvas id="camera-canvas" style="display: none;"></canvas>
+                <div class="camera-placeholder" id="camera-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Main Button -->
+            <div class="button-area">
+                <button id="log-waste-btn" class="waste-button">
+                    <div class="button-pulse"></div>
+                    <svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                    <span class="button-label">LOG WASTE</span>
+                </button>
+                <p class="status-text" id="status-text">Tap to speak</p>
+            </div>
+
+            <!-- Transcript Display -->
+            <div class="transcript-container" id="transcript-container">
+                <p class="transcript-text" id="transcript-text"></p>
+            </div>
+
+            <!-- Interpretation Result -->
+            <div class="interpretation-container" id="interpretation-container">
+                <div class="interpretation-header">
+                    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>Understood</span>
+                </div>
+                <div class="interpretation-content">
+                    <span class="item-icon" id="item-icon">🍗</span>
+                    <div class="item-details">
+                        <span class="item-name" id="item-name">Chicken Filets</span>
+                        <span class="item-meta" id="item-meta">30 count • Proteins</span>
+                    </div>
+                </div>
+                <div class="interpretation-actions">
+                    <button class="btn-confirm" id="btn-confirm">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Confirm <span class="countdown" id="countdown"></span>
+                    </button>
+                    <button class="btn-edit" id="btn-edit">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Log -->
+            <div class="log-container">
+                <h3 class="log-header">Recent Entries</h3>
+                <div class="log-list" id="log-list">
+                    <p class="log-empty">No waste logged yet today</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="success-toast">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span id="toast-message">Waste logged successfully!</span>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
