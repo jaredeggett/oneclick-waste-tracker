@@ -25,46 +25,62 @@
                 <h1 class="help-title">Voice Waste Tracker</h1>
                 <p class="help-subtitle">Tap the button and say what you wasted</p>
 
+                <!-- Voice Input Format Guide -->
+                <div class="format-guide">
+                    <h3 class="format-header">How to Report Waste</h3>
+                    <p class="format-description">Say a sentence that includes:</p>
+
+                    <div class="format-items">
+                        <div class="format-item">
+                            <span class="format-label">ITEM</span>
+                            <span class="format-desc">What you threw away</span>
+                            <span class="format-example">chicken filets, biscuits, lettuce</span>
+                        </div>
+                        <div class="format-item">
+                            <span class="format-label">QUANTITY</span>
+                            <span class="format-desc">How much</span>
+                            <span class="format-example">50, 10, 3</span>
+                        </div>
+                        <div class="format-item">
+                            <span class="format-label">UNIT</span>
+                            <span class="format-desc">Unit of measure</span>
+                            <span class="format-example">count, pounds, bags, gallons</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="examples-section">
                     <h3 class="examples-header">Example phrases:</h3>
 
                     <div class="example-card">
                         <span class="example-icon">🍗</span>
                         <div class="example-content">
-                            <span class="example-text">"I threw away 50 chicken filets"</span>
-                            <span class="example-category">Proteins</span>
+                            <span class="example-text">"I threw away <strong>50</strong> <strong>chicken filets</strong>"</span>
+                            <span class="example-breakdown">Item: Chicken Filets · Qty: 50 · Unit: count</span>
                         </div>
                     </div>
 
                     <div class="example-card">
                         <span class="example-icon">🌾</span>
                         <div class="example-content">
-                            <span class="example-text">"Wasted 10 pounds of flour"</span>
-                            <span class="example-category">Dry Goods</span>
+                            <span class="example-text">"Wasted <strong>10 pounds</strong> of <strong>flour</strong>"</span>
+                            <span class="example-breakdown">Item: Flour · Qty: 10 · Unit: pounds</span>
                         </div>
                     </div>
 
                     <div class="example-card">
                         <span class="example-icon">🍋</span>
                         <div class="example-content">
-                            <span class="example-text">"Dumped 2 gallons of lemonade"</span>
-                            <span class="example-category">Beverages</span>
-                        </div>
-                    </div>
-
-                    <div class="example-card">
-                        <span class="example-icon">🥐</span>
-                        <div class="example-content">
-                            <span class="example-text">"25 biscuits expired"</span>
-                            <span class="example-category">Breads</span>
+                            <span class="example-text">"Dumped <strong>2 gallons</strong> of <strong>lemonade</strong>"</span>
+                            <span class="example-breakdown">Item: Lemonade · Qty: 2 · Unit: gallons</span>
                         </div>
                     </div>
 
                     <div class="example-card">
                         <span class="example-icon">🥬</span>
                         <div class="example-content">
-                            <span class="example-text">"3 bags of lettuce went bad"</span>
-                            <span class="example-category">Produce</span>
+                            <span class="example-text">"<strong>3 bags</strong> of <strong>lettuce</strong> went bad"</span>
+                            <span class="example-breakdown">Item: Lettuce · Qty: 3 · Unit: bags</span>
                         </div>
                     </div>
                 </div>
@@ -74,23 +90,33 @@
                     <span class="category-badge">Produce</span>
                     <span class="category-badge">Breads</span>
                     <span class="category-badge">Dairy</span>
-                    <span class="category-badge">Sauces</span>
-                    <span class="category-badge">Menu Items</span>
+                    <span class="category-badge">Dry Goods</span>
+                    <span class="category-badge">Beverages</span>
                 </div>
             </div>
         </aside>
 
         <!-- Right Panel - Input Area -->
         <main class="input-panel">
-            <!-- Camera Preview -->
-            <div class="camera-container">
-                <video id="camera-preview" autoplay playsinline muted></video>
-                <canvas id="camera-canvas" style="display: none;"></canvas>
-                <div class="camera-placeholder" id="camera-placeholder">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Camera Preview - Large -->
+            <div class="camera-section">
+                <div class="camera-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                         <circle cx="12" cy="13" r="4"/>
                     </svg>
+                    <span>Employee Camera</span>
+                </div>
+                <div class="camera-container">
+                    <video id="camera-preview" autoplay playsinline muted></video>
+                    <canvas id="camera-canvas" style="display: none;"></canvas>
+                    <div class="camera-placeholder" id="camera-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        <span>Camera loading...</span>
+                    </div>
                 </div>
             </div>
 

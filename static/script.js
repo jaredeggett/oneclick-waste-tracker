@@ -153,7 +153,12 @@ class WasteTracker {
 
         this.recognition.onend = () => {
             this.isListening = false;
-            if (!this.isProcessing && !this.currentInterpretation) {
+
+            // If we have a transcript but haven't processed it yet, process it now
+            // This handles cases where isFinal never fires
+            if (this.currentTranscript && !this.isProcessing && !this.currentInterpretation) {
+                this.processTranscript(this.currentTranscript);
+            } else if (!this.isProcessing && !this.currentInterpretation) {
                 this.updateUI('idle');
             }
         };
